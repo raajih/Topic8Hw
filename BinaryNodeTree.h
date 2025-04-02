@@ -56,7 +56,7 @@ public:
     //------------------------------------------------------------ 
     // Public BinaryTreeInterface Methods Section. 
     //------------------------------------------------------------ 
-    bool isEmpty() const; 
+    bool isEmpty() const;
     int getHeight() const; 
     int getNumberOfNodes() const; 
     ItemType getRootData() const throw(PrecondViolatedExcep); 
