@@ -37,6 +37,12 @@ BinaryNodeTree<ItemType>::BinaryNodeTree(const BinaryNodeTree<ItemType>& tree)
 }
 
 template<class ItemType>
+BinaryNodeTree<ItemType>::~BinaryNodeTree()
+{
+	destroyTree(rootPtr);
+}
+
+template<class ItemType>
 bool BinaryNodeTree<ItemType>::isEmpty() const
 {
 	return rootPtr == nullptr;
@@ -45,7 +51,7 @@ bool BinaryNodeTree<ItemType>::isEmpty() const
 template<class ItemType>
 inline int BinaryNodeTree<ItemType>::getHeightHelper(BinaryNode<ItemType>* subTreePtr) const
 {
-	if (subTreePtr == nullPtr) //Base case
+	if (subTreePtr == nullptr) //Base case
 		return 0;
 	else
 	{	
@@ -57,8 +63,73 @@ inline int BinaryNodeTree<ItemType>::getHeightHelper(BinaryNode<ItemType>* subTr
 }
 
 template<class ItemType>
+int BinaryNodeTree<ItemType>::getNumberOfNodesHelper(BinaryNode<ItemType>* subTreePtr) const
+{
+	if (subTreePtr == nullptr) //Base case
+		return 0;
+
+	else
+	{
+		int leftNumNodes = getNumberOfNodesHelper(subTreePtr->getLeftChildPtr());
+		int rightNumNodes = getNumberOfNodesHelper(subTreePtr->getRightChildPtr());
+
+		return leftNumNodes + rightNumNodes + 1;
+	}
+}
+
+template<class ItemType>
+void BinaryNodeTree<ItemType>::destroyTree(BinaryNode<ItemType>* subTreePtr)
+{
+	if (subTreePtr != nullptr)
+	{
+		destroyTree(subTreePtr->getLeftChildPtr());
+		destroyTree(subTreePtr->getRightChildPtr());
+		delete subTreePtr;
+	}
+}
+
+//TODO: don't forget for the add method to account for the case that the tree is empty and rootptr == nullptr
+template<class ItemType>
+BinaryNode<ItemType>* BinaryNodeTree<ItemType>::balancedAdd(BinaryNode<ItemType>* subTreePtr, BinaryNode<ItemType>* newNodePtr)
+{
+	//Base case
+	if (subTreePtr == nullptr)
+		return newNodePtr;
+
+	int leftHeight = (subTreePtr->getLeftChildPtr() != nullptr) ? getHeightHelper(subTreePtr->getLeftChildPtr()) : 0;
+	int rightHeight = (subTreePtr->getRightChildPtr() != nullptr) ? getHeightHelper(subTreePtr->getRightChildPtr()) : 0;
+
+	//If the left subtree has a smaller height or is the same height as right subtree, add node to left subtree. Otherwise add to right
+	if (leftHeight <= rightHeight) 
+		subTreePtr->setLeftChildPtr(balancedAdd(subTreePtr->getLeftChildPtr(), newNodePtr));
+	else 
+		subTreePtr->setRightChildPtr(balancedAdd(subTreePtr->getRightChildPtr(), newNodePtr));
+
+	return subTreePtr;
+}
+
+template<class ItemType>
 int BinaryNodeTree<ItemType>::getHeight() const
 {
 	return getHeightHelper(rootPtr);
+}
+
+template<class ItemType>
+int BinaryNodeTree<ItemType>::getNumberOfNodes() const
+{
+	return getNumberOfNodesHelper(rootPtr);
+}
+
+template<class ItemType>
+bool BinaryNodeTree<ItemType>::add(const ItemType& newData)
+{
+	BinaryNode<ItemType>* newNode = new BinaryNode<ItemType>(newData);
+
+	if (rootPtr == nullptr)
+		rootPtr = newNode;
+	else
+		balancedAdd(rootPtr, newNode);
+
+	return true;
 }
 //TODO: For the removal in a binary search tree, if the node has two child nodes that is the complicated one. Look at powerpoint for instructions on how to do that. Find another node easier to remove...

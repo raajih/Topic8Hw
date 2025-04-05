@@ -26,21 +26,21 @@ protected:
     BinaryNode<ItemType>* balancedAdd(BinaryNode<ItemType>* subTreePtr, BinaryNode<ItemType>* newNodePtr); 
     // Removes the target value from the tree by calling moveValuesUpTree 
     // to overwrite value with value from child. 
-    BinaryNode<ItemType>* removeValue(BinaryNode<ItemType>* subTreePtr, const ItemType target, bool& success); 
+    //BinaryNode<ItemType>* removeValue(BinaryNode<ItemType>* subTreePtr, const ItemType target, bool& success); 
     // Copies values up the tree to overwrite value in current node until 
     // a leaf is reached; the leaf is then removed, since its value is 
     // stored in the parent. 
-    BinaryNode<ItemType>* moveValuesUpTree(BinaryNode<ItemType>* subTreePtr); 
+    //BinaryNode<ItemType>* moveValuesUpTree(BinaryNode<ItemType>* subTreePtr); 
     // Recursively searches for target value in the tree by using a 
     // preorder traversal. 
-    BinaryNode<ItemType>* findNode(BinaryNode<ItemType>* treePtr, const ItemType& target, bool& success) const; 
+    //BinaryNode<ItemType>* findNode(BinaryNode<ItemType>* treePtr, const ItemType& target, bool& success) const; 
     // Copies the tree rooted at treePtr and returns a pointer to 
     // the copy. 
     BinaryNode<ItemType>* copyTree(const BinaryNode<ItemType>* treePtr) const; 
     // Recursive traversal helper methods: 
-    void preorder(void visit(ItemType&), BinaryNode<ItemType>* treePtr) const; 
-    void inorder(void visit(ItemType&), BinaryNode<ItemType>* treePtr) const; 
-    void postorder(void visit(ItemType&), BinaryNode<ItemType>* treePtr) const; 
+    //void preorder(void visit(ItemType&), BinaryNode<ItemType>* treePtr) const; 
+    //void inorder(void visit(ItemType&), BinaryNode<ItemType>* treePtr) const; 
+    //void postorder(void visit(ItemType&), BinaryNode<ItemType>* treePtr) const; 
 
 public: 
     //------------------------------------------------------------ 
@@ -59,23 +59,23 @@ public:
     bool isEmpty() const;
     int getHeight() const; 
     int getNumberOfNodes() const; 
-    ItemType getRootData() const throw(PrecondViolatedExcep); 
-    void setRootData(const ItemType& newData); 
+    //ItemType getRootData() const throw(PrecondViolatedExcep); 
+    //void setRootData(const ItemType& newData); 
     bool add(const ItemType& newData); // Adds a node 
-    bool remove(const ItemType& data); // Removes a node 
-    void clear(); 
-    ItemType getEntry(const ItemType& anEntry) const throw(NotFoundException); 
-    bool contains(const ItemType& anEntry) const; 
+    //bool remove(const ItemType& data); // Removes a node 
+    //void clear(); 
+    //ItemType getEntry(const ItemType& anEntry) const throw(NotFoundException); 
+    //bool contains(const ItemType& anEntry) const; 
     //------------------------------------------------------------ 
     // Public Traversals Section. 
     //------------------------------------------------------------ 
-    void preorderTraverse(void visit(ItemType&)) const; 
-    void inorderTraverse(void visit(ItemType&)) const; 
-    void postorderTraverse(void visit(ItemType&)) const; 
+    //void preorderTraverse(void visit(ItemType&)) const; 
+    //void inorderTraverse(void visit(ItemType&)) const; 
+    //void postorderTraverse(void visit(ItemType&)) const; 
     //------------------------------------------------------------ 
     // Overloaded Operator Section. 
     //------------------------------------------------------------ 
-    BinaryNodeTree& operator=(const BinaryNodeTree& rightHandSide); 
+    //BinaryNodeTree& operator=(const BinaryNodeTree& rightHandSide); 
 }; // end BinaryNodeTree 
 #include "BinaryNodeTree.cpp" 
 #endif
