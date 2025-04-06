@@ -8,7 +8,7 @@
 #include "NotFoundException.h"
 #include "PrecondViolatedExcep.h"
 template<class ItemType>
-class BinarySearchTree : public BinaryTreeInterface<ItemType>
+class BinarySearchTree : public BinaryNodeTree<ItemType>
 {
 	private:
 	BinaryNode<ItemType>* rootPtr;
@@ -21,20 +21,16 @@ class BinarySearchTree : public BinaryTreeInterface<ItemType>
 	// Recursively finds where the given node should be placed and
 	// inserts it in a leaf at that point.
 	BinaryNode<ItemType>* insertInorder(BinaryNode<ItemType>* subTreePtr, BinaryNode<ItemType>* newNode);
+	void inorder(void visit(ItemType), BinaryNode<ItemType>* treePtr) const;
 	// Removes the given target value from the tree while maintaining a
 	// binary search tree.
-	BinaryNode<ItemType>* removeValue(BinaryNode<ItemType>* subTreePtr, const ItemType target, bool& success);
-	// Removes a given node from a tree while maintaining a
-	// binary search tree.
-	BinaryNode<ItemType>* removeNode(BinaryNode<ItemType>* nodePtr);
-	// Removes the leftmost node in the left subtree of the node
-	// pointed to by nodePtr.
-	// Sets inorderSuccessor to the value in this node.
-	// Returns a pointer to the revised subtree.
-	BinaryNode<ItemType>* removeLeftmostNode(BinaryNode<ItemType>* subTreePtr, ItemType& inorderSuccessor);
+	BinaryNode<ItemType>* removeValue(BinaryNode<ItemType>* subTreePtr, const ItemType target);
+	BinaryNode<ItemType>* moveValuesUpTree(BinaryNode<ItemType>* subTreePtr);
+	BinaryNode<ItemType>* findLargestNode(BinaryNode<ItemType>* subTreePtr) const;
 	// Returns a pointer to the node containing the given value,
 	// or nullptr if not found.
 	BinaryNode<ItemType>* findNode(BinaryNode<ItemType>* treePtr, const ItemType& target) const;
+	bool isSameTreeHelper(BinaryNode<ItemType>* tree1, BinaryNode<ItemType>* tree2) const;
 
 	public:
 	//------------------------------------------------------------
@@ -43,7 +39,7 @@ class BinarySearchTree : public BinaryTreeInterface<ItemType>
 	BinarySearchTree();
 	BinarySearchTree(const ItemType& rootItem);
 	BinarySearchTree(const BinarySearchTree<ItemType>& tree);
-	virtual ~BinarySearchTree();
+	//virtual ~BinarySearchTree();
 	//------------------------------------------------------------
 	// Public Methods Section.
 	//------------------------------------------------------------
@@ -60,17 +56,20 @@ class BinarySearchTree : public BinaryTreeInterface<ItemType>
 	//------------------------------------------------------------
 	// Public Traversals Section.
 	//------------------------------------------------------------
-	void preorderTraverse(void visit(ItemType&)) const;
-	void inorderTraverse(void visit(ItemType&)) const;
-	void postorderTraverse(void visit(ItemType&)) const;
+	void preorderTraverse(void visit(ItemType)) const;
+	void inorderTraverse(void visit(ItemType)) const;
+	void postorderTraverse(void visit(ItemType)) const;
 	//------------------------------------------------------------
 	// Overloaded Operator Section.
 	//------------------------------------------------------------
-	 BinarySearchTree<ItemType>& operator=(const BinarySearchTree<ItemType>& rightHandSide);
+	BinarySearchTree<ItemType>& operator=(const BinarySearchTree<ItemType>& rightHandSide);
+	
 }; 
 //Other
-bool isSameTree<BinarySearchTree<ItemType>>(const BinarySearchTree<ItemType>* other) const;
+
 
 // end BinarySearchTree
 #include "BinarySearchTree.cpp"
 #endif
+
+
