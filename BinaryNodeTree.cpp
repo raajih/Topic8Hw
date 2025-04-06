@@ -10,6 +10,92 @@ BinaryNodeTree<ItemType>::BinaryNodeTree(const ItemType& rootItem)
 }
 
 template<class ItemType>
+BinaryNode<ItemType>* BinaryNodeTree<ItemType>::moveValuesUpTree(BinaryNode<ItemType>* subTreePtr)
+{
+	bool success = false;  // Initialize success variable
+
+	if (subTreePtr == nullptr)
+	{
+		success = false;  // Nothing to remove
+		return nullptr;
+	}
+
+	if (subTreePtr->isLeaf())  // Case 1: Leaf node
+	{
+		delete subTreePtr;
+		success = true;  // Node was successfully removed
+		return nullptr;
+	}
+
+	BinaryNode<ItemType>* childPtr = nullptr;
+
+	// Case 2: Node with one child
+	if (subTreePtr->getLeftChildPtr() != nullptr)
+	{
+		childPtr = subTreePtr->getLeftChildPtr();
+	}
+	else if (subTreePtr->getRightChildPtr() != nullptr)
+	{
+		childPtr = subTreePtr->getRightChildPtr();
+	}
+
+	// Move up the child and delete the current node
+	if (childPtr != nullptr)
+	{
+		BinaryNode<ItemType>* temp = subTreePtr;
+		subTreePtr = childPtr;
+		temp->setLeftChildPtr(nullptr);
+		temp->setRightChildPtr(nullptr);
+		delete temp;
+		success = true;  // Node was successfully removed
+	}
+	// Case 3: Node with two children
+	else if (subTreePtr->getLeftChildPtr() != nullptr && subTreePtr->getRightChildPtr() != nullptr)
+	{
+		BinaryNode<ItemType>* largestInLeftSubtree = findLargestNode(subTreePtr->getLeftChildPtr());
+		subTreePtr->setItem(largestInLeftSubtree->getItem());
+		subTreePtr->setLeftChildPtr(removeValue(subTreePtr->getLeftChildPtr(), largestInLeftSubtree->getItem(), success));
+		success = true;  // Node was successfully replaced
+	}
+
+	return subTreePtr; //SOOOO much trouble with this method.
+}
+
+template<class ItemType>
+BinaryNode<ItemType>* BinaryNodeTree<ItemType>::findLargestNode(BinaryNode<ItemType>* subTreePtr) const
+{
+	// Traverse to the rightmost leaf in the left subtree 
+	while (subTreePtr->getRightChildPtr() != nullptr) 
+	{
+		subTreePtr = subTreePtr->getRightChildPtr();
+	}
+	return subTreePtr;
+}
+
+template<class ItemType>
+BinaryNode<ItemType>* BinaryNodeTree<ItemType>::findNode(BinaryNode<ItemType>* treePtr, const ItemType& target, bool& success) const
+{
+	//Base case: value is not found
+	if (treePtr == nullptr)
+	{
+		success = false;
+		return treePtr;
+	}
+	//Base case: value is found
+	else if (treePtr->getItem() == target)
+	{
+		success = true;
+		return treePtr;
+	}
+	
+	BinaryNode<ItemType>* leftResult = findNode(treePtr->getLeftChildPtr(), target, success);
+	if (success)
+		return leftResult;
+
+	return findNode(treePtr->getRightChildPtr(), target, success);
+}
+
+template<class ItemType>
 inline BinaryNode<ItemType>* BinaryNodeTree<ItemType>::copyTree(const BinaryNode<ItemType>* treePtr) const
 {
 	BinaryNode<ItemType>* newTreePtr;
@@ -88,7 +174,6 @@ void BinaryNodeTree<ItemType>::destroyTree(BinaryNode<ItemType>* subTreePtr)
 	}
 }
 
-//TODO: don't forget for the add method to account for the case that the tree is empty and rootptr == nullptr
 template<class ItemType>
 BinaryNode<ItemType>* BinaryNodeTree<ItemType>::balancedAdd(BinaryNode<ItemType>* subTreePtr, BinaryNode<ItemType>* newNodePtr)
 {
@@ -109,6 +194,35 @@ BinaryNode<ItemType>* BinaryNodeTree<ItemType>::balancedAdd(BinaryNode<ItemType>
 }
 
 template<class ItemType>
+BinaryNode<ItemType>* BinaryNodeTree<ItemType>::removeValue(BinaryNode<ItemType>* subTreePtr, const ItemType target, bool& success)
+{
+	if (subTreePtr == nullptr)
+	{
+		success = false;  // Nothing to remove
+		return nullptr;
+	}
+
+	// Case 1: The target is less than the current node, move left
+	if (target < subTreePtr->getItem())
+	{
+		subTreePtr->setLeftChildPtr(removeValue(subTreePtr->getLeftChildPtr(), target, success));
+	}
+	// Case 2: The target is greater than the current node, move right
+	else if (target > subTreePtr->getItem())
+	{
+		subTreePtr->setRightChildPtr(removeValue(subTreePtr->getRightChildPtr(), target, success));
+	}
+	// Case 3: The target is equal to the current node, delete it
+	else
+	{
+		success = true;
+		subTreePtr = moveValuesUpTree(subTreePtr);  // Move values up and return new subtree root
+	}
+
+	return subTreePtr;
+}
+
+template<class ItemType>
 int BinaryNodeTree<ItemType>::getHeight() const
 {
 	return getHeightHelper(rootPtr);
@@ -118,6 +232,12 @@ template<class ItemType>
 int BinaryNodeTree<ItemType>::getNumberOfNodes() const
 {
 	return getNumberOfNodesHelper(rootPtr);
+}
+
+template<class ItemType>
+ItemType BinaryNodeTree<ItemType>::getRootData() const throw(PrecondViolatedExcep)
+{
+	return rootPtr->getItem();
 }
 
 template<class ItemType>
@@ -131,5 +251,32 @@ bool BinaryNodeTree<ItemType>::add(const ItemType& newData)
 		balancedAdd(rootPtr, newNode);
 
 	return true;
+}
+
+template<class ItemType>
+bool BinaryNodeTree<ItemType>::remove(const ItemType& data)
+{
+	if (contains(data))
+	{
+		bool success = false;
+		rootPtr = removeValue(rootPtr, data, success);  // Update rootPtr after removal
+		return true;
+	}
+	else
+		return false;
+}
+
+template<class ItemType>
+void BinaryNodeTree<ItemType>::clear()
+{
+	destroyTree(rootPtr);
+	rootPtr = nullptr;
+}
+
+template<class ItemType>
+bool BinaryNodeTree<ItemType>::contains(const ItemType& anEntry) const
+{
+	bool success = false;
+	return findNode(rootPtr, anEntry, success) != nullptr;
 }
 //TODO: For the removal in a binary search tree, if the node has two child nodes that is the complicated one. Look at powerpoint for instructions on how to do that. Find another node easier to remove...

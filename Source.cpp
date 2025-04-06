@@ -6,18 +6,16 @@ using namespace std;
 int main()
 {
 	BinaryNodeTree<int> tree;
-
-	cout << tree.getHeight() << endl;
+	cout << (tree.isEmpty() ? "Tree is empty" : "Tree is not empty") << endl;
 	tree.add(5);
-	cout << tree.getHeight() << endl;
 	tree.add(7);
-	cout << tree.getHeight() << endl;
 	tree.add(1);
-	cout << tree.getHeight() << endl;
 	tree.add(2);
-	cout << tree.getHeight() << endl;
-
 	
+	cout << tree.getRootData() << endl;
+	tree.remove(5);
+	cout << tree.getRootData() << endl;
+
 	
 	return 0;
 }

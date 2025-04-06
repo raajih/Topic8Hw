@@ -26,14 +26,15 @@ protected:
     BinaryNode<ItemType>* balancedAdd(BinaryNode<ItemType>* subTreePtr, BinaryNode<ItemType>* newNodePtr); 
     // Removes the target value from the tree by calling moveValuesUpTree 
     // to overwrite value with value from child. 
-    //BinaryNode<ItemType>* removeValue(BinaryNode<ItemType>* subTreePtr, const ItemType target, bool& success); 
+    BinaryNode<ItemType>* removeValue(BinaryNode<ItemType>* subTreePtr, const ItemType target, bool& success); 
     // Copies values up the tree to overwrite value in current node until 
     // a leaf is reached; the leaf is then removed, since its value is 
     // stored in the parent. 
-    //BinaryNode<ItemType>* moveValuesUpTree(BinaryNode<ItemType>* subTreePtr); 
+    BinaryNode<ItemType>* moveValuesUpTree(BinaryNode<ItemType>* subTreePtr); 
+    BinaryNode<ItemType>* findLargestNode(BinaryNode<ItemType>* subTreePtr) const;
     // Recursively searches for target value in the tree by using a 
     // preorder traversal. 
-    //BinaryNode<ItemType>* findNode(BinaryNode<ItemType>* treePtr, const ItemType& target, bool& success) const; 
+    BinaryNode<ItemType>* findNode(BinaryNode<ItemType>* treePtr, const ItemType& target, bool& success) const; 
     // Copies the tree rooted at treePtr and returns a pointer to 
     // the copy. 
     BinaryNode<ItemType>* copyTree(const BinaryNode<ItemType>* treePtr) const; 
@@ -59,13 +60,13 @@ public:
     bool isEmpty() const;
     int getHeight() const; 
     int getNumberOfNodes() const; 
-    //ItemType getRootData() const throw(PrecondViolatedExcep); 
+    ItemType getRootData() const throw(PrecondViolatedExcep); 
     //void setRootData(const ItemType& newData); 
     bool add(const ItemType& newData); // Adds a node 
-    //bool remove(const ItemType& data); // Removes a node 
-    //void clear(); 
+    bool remove(const ItemType& data); // Removes a node 
+    void clear(); 
     //ItemType getEntry(const ItemType& anEntry) const throw(NotFoundException); 
-    //bool contains(const ItemType& anEntry) const; 
+    bool contains(const ItemType& anEntry) const; 
     //------------------------------------------------------------ 
     // Public Traversals Section. 
     //------------------------------------------------------------ 
