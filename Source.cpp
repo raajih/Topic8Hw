@@ -4,10 +4,6 @@
 #include "BinarySearchTree.h"
 using namespace std;
 
-void printItem(int item)
-{
-	cout << item << " ";
-}
 
 class Date {
 public:
@@ -54,6 +50,12 @@ void displayPerson(Person person)
 	person.birthday.displayDate();
 }
 
+void monthQuery(Person person, int month)
+{
+	if (person.birthday.month == month)
+		displayPerson(person);
+}
+
 int main()
 {
 	BinarySearchTree<Person> tree;
@@ -72,7 +74,7 @@ int main()
 			<< "(S)earch--display the information about a given person\n"
 			<< "(Q)uery--run a query by entering a month\n"
 			<< "(P)rint--print list of people\n"
-			<< "(Q)uit\n";
+			<< "(F)inish\n";
 		cout << "Enter choice: ";
 		cin >> choice;
 
@@ -136,12 +138,32 @@ int main()
 				cout << person.name << " removed!\n";
 			}
 			break;
-		case 'p':
-		case 'P':
-			tree.inorderTraverse(displayPerson);
+		case 's':
+		case 'S':
+			cin.ignore();
+			cout << "\nEnter the name of the person you want to search for: ";
+			getline(cin, newName);
+			person.name = newName;
+
+			if (tree.contains(person))
+			{
+				person = tree.getEntry(person);
+				displayPerson(person);
+			}
+			else
+				cout << "\nPerson not in list.\n";
+			break;
+		case 'q':
+		case 'Q':
+			cin.ignore();
+			cout << "\nEnter the month you would like to view: ";
+			cin >> newMonth;
+			tree.inorderMonthQuery(monthQuery, newMonth);
+
 			break;
 		}
-	} while (repeat != 'q' && repeat != 'Q');
+		cin.ignore();
+	} while (repeat != 'F' && repeat != 'f');
 
 
 	

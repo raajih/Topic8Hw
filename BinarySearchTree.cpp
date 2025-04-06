@@ -60,11 +60,11 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::removeValue(BinaryNode<ItemTyp
 template<class ItemType>
 BinaryNode<ItemType>* BinarySearchTree<ItemType>::moveValuesUpTree(BinaryNode<ItemType>* subTreePtr)
 {
-	bool success = false;
+	
 
 	if (subTreePtr == nullptr)
 	{
-		success = false;  // Nothing to remove
+		
 		return nullptr;
 	}
 
@@ -74,13 +74,11 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::moveValuesUpTree(BinaryNode<It
 		BinaryNode<ItemType>* largestInLeftSubtree = findLargestNode(subTreePtr->getLeftChildPtr());
 		subTreePtr->setItem(largestInLeftSubtree->getItem());
 		subTreePtr->setLeftChildPtr(removeValue(subTreePtr->getLeftChildPtr(), largestInLeftSubtree->getItem()));
-		success = true;  // Node was successfully replaced
 	}
 	// Case 1: Leaf node (no children)
 	else if (subTreePtr->isLeaf())
 	{
 		delete subTreePtr;
-		success = true;  // Node was successfully removed
 		return nullptr;
 	}
 	// Case 2: Node with one child
@@ -107,7 +105,6 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::moveValuesUpTree(BinaryNode<It
 			temp->setLeftChildPtr(nullptr);
 			temp->setRightChildPtr(nullptr);
 			delete temp;
-			success = true;  // Node was successfully removed
 		}
 	}
 
@@ -251,6 +248,12 @@ bool BinarySearchTree<ItemType>::contains(const ItemType& anEntry) const
 }
 
 template<class ItemType>
+void BinarySearchTree<ItemType>::inorderMonthQuery(void visit(ItemType, int), int month) const
+{
+	inorderMonthQueryHelper(visit, rootPtr, month);
+}
+
+template<class ItemType>
 void BinarySearchTree<ItemType>::preorderTraverse(void visit(ItemType)) const
 {
 	BinaryNodeTree<ItemType>::preorder(visit, rootPtr);
@@ -280,6 +283,17 @@ BinarySearchTree<ItemType>& BinarySearchTree<ItemType>::operator=(const BinarySe
 		rootPtr = BinaryNodeTree<ItemType>::copyTree(rightHandSide.rootPtr);
 	}
 	return *this;
+}
+
+template<class ItemType>
+void BinarySearchTree<ItemType>::inorderMonthQueryHelper(void visit(ItemType, int), BinaryNode<ItemType>* treePtr, int queryMonth) const
+{
+	if (treePtr != nullptr)
+	{
+		inorderMonthQueryHelper(visit, treePtr->getLeftChildPtr(), queryMonth);
+		visit(treePtr->getItem(), queryMonth);
+		inorderMonthQueryHelper(visit, treePtr->getRightChildPtr(), queryMonth);
+	}
 }
 
 

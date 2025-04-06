@@ -31,6 +31,7 @@ class BinarySearchTree : public BinaryNodeTree<ItemType>
 	// or nullptr if not found.
 	BinaryNode<ItemType>* findNode(BinaryNode<ItemType>* treePtr, const ItemType& target) const;
 	bool isSameTreeHelper(BinaryNode<ItemType>* tree1, BinaryNode<ItemType>* tree2) const;
+	void inorderMonthQueryHelper(void visit(ItemType, int), BinaryNode<ItemType>* treePtr, int queryMonth) const;
 
 	public:
 	//------------------------------------------------------------
@@ -53,6 +54,7 @@ class BinarySearchTree : public BinaryNodeTree<ItemType>
 	void clear();
 	ItemType getEntry(const ItemType& anEntry) const throw(NotFoundException);
 	bool contains(const ItemType& anEntry) const;
+	void inorderMonthQuery(void visit(ItemType, int), int month) const;
 	//------------------------------------------------------------
 	// Public Traversals Section.
 	//------------------------------------------------------------
@@ -63,6 +65,7 @@ class BinarySearchTree : public BinaryNodeTree<ItemType>
 	// Overloaded Operator Section.
 	//------------------------------------------------------------
 	BinarySearchTree<ItemType>& operator=(const BinarySearchTree<ItemType>& rightHandSide);
+	
 	
 }; 
 //Other
