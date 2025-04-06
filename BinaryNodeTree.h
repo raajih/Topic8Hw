@@ -39,9 +39,9 @@ protected:
     // the copy. 
     BinaryNode<ItemType>* copyTree(const BinaryNode<ItemType>* treePtr) const; 
     // Recursive traversal helper methods: 
-    //void preorder(void visit(ItemType&), BinaryNode<ItemType>* treePtr) const; 
-    //void inorder(void visit(ItemType&), BinaryNode<ItemType>* treePtr) const; 
-    //void postorder(void visit(ItemType&), BinaryNode<ItemType>* treePtr) const; 
+    void preorder(void visit(ItemType), BinaryNode<ItemType>* treePtr) const; 
+    void inorder(void visit(ItemType), BinaryNode<ItemType>* treePtr) const; 
+    void postorder(void visit(ItemType), BinaryNode<ItemType>* treePtr) const; 
 
 public: 
     //------------------------------------------------------------ 
@@ -61,22 +61,22 @@ public:
     int getHeight() const; 
     int getNumberOfNodes() const; 
     ItemType getRootData() const throw(PrecondViolatedExcep); 
-    //void setRootData(const ItemType& newData); 
+    void setRootData(const ItemType& newData); 
     bool add(const ItemType& newData); // Adds a node 
     bool remove(const ItemType& data); // Removes a node 
     void clear(); 
-    //ItemType getEntry(const ItemType& anEntry) const throw(NotFoundException); 
+    ItemType getEntry(const ItemType& anEntry) const throw(NotFoundException); 
     bool contains(const ItemType& anEntry) const; 
     //------------------------------------------------------------ 
     // Public Traversals Section. 
     //------------------------------------------------------------ 
-    //void preorderTraverse(void visit(ItemType&)) const; 
-    //void inorderTraverse(void visit(ItemType&)) const; 
-    //void postorderTraverse(void visit(ItemType&)) const; 
+    void preorderTraverse(void visit(ItemType)) const; 
+    void inorderTraverse(void visit(ItemType)) const; 
+    void postorderTraverse(void visit(ItemType)) const; 
     //------------------------------------------------------------ 
     // Overloaded Operator Section. 
     //------------------------------------------------------------ 
-    //BinaryNodeTree& operator=(const BinaryNodeTree& rightHandSide); 
+    BinaryNodeTree& operator=(const BinaryNodeTree& rightHandSide); 
 }; // end BinaryNodeTree 
 #include "BinaryNodeTree.cpp" 
 #endif

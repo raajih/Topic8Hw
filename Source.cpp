@@ -3,6 +3,11 @@
 #include "BinaryNodeTree.h"
 using namespace std;
 
+void printItem(int item)
+{
+	cout << item << " ";
+}
+
 int main()
 {
 	BinaryNodeTree<int> tree;
@@ -12,9 +17,12 @@ int main()
 	tree.add(1);
 	tree.add(2);
 	
-	cout << tree.getRootData() << endl;
-	tree.remove(5);
-	cout << tree.getRootData() << endl;
+	BinaryNodeTree<int> newTree;
+
+	newTree = tree;
+	tree.clear();
+
+	newTree.inorderTraverse(printItem);
 
 	
 	return 0;

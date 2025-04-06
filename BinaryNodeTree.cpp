@@ -12,7 +12,7 @@ BinaryNodeTree<ItemType>::BinaryNodeTree(const ItemType& rootItem)
 template<class ItemType>
 BinaryNode<ItemType>* BinaryNodeTree<ItemType>::moveValuesUpTree(BinaryNode<ItemType>* subTreePtr)
 {
-	bool success = false;  // Initialize success variable
+	bool success = false;
 
 	if (subTreePtr == nullptr)
 	{
@@ -98,7 +98,7 @@ BinaryNode<ItemType>* BinaryNodeTree<ItemType>::findNode(BinaryNode<ItemType>* t
 template<class ItemType>
 inline BinaryNode<ItemType>* BinaryNodeTree<ItemType>::copyTree(const BinaryNode<ItemType>* treePtr) const
 {
-	BinaryNode<ItemType>* newTreePtr;
+	BinaryNode<ItemType>* newTreePtr = nullptr;
 
 	if (treePtr != nullptr)
 	{
@@ -108,6 +108,40 @@ inline BinaryNode<ItemType>* BinaryNodeTree<ItemType>::copyTree(const BinaryNode
 		newTreePtr->setRightChildPtr(copyTree(treePtr->getRightChildPtr()));
 	}
 	return newTreePtr;
+}
+
+template<class ItemType>
+void BinaryNodeTree<ItemType>::preorder(void visit(ItemType), BinaryNode<ItemType>* treePtr) const
+{
+	if (treePtr != nullptr)
+	{
+		visit(treePtr->getItem());
+		preorder(visit, treePtr->getLeftChildPtr());
+		preorder(visit, treePtr->getRightChildPtr());
+	}
+}
+
+template<class ItemType>
+void BinaryNodeTree<ItemType>::inorder(void visit(ItemType), BinaryNode<ItemType>* treePtr) const
+{
+	if (treePtr != nullptr)
+	{
+		inorder(visit, treePtr->getLeftChildPtr());
+		visit(treePtr->getItem());
+		inorder(visit, treePtr->getRightChildPtr());
+	}
+}
+
+template<class ItemType>
+void BinaryNodeTree<ItemType>::postorder(void visit(ItemType), BinaryNode<ItemType>* treePtr) const
+{
+	if (treePtr != nullptr)
+	{
+		postorder(visit, treePtr->getLeftChildPtr());
+		postorder(visit, treePtr->getRightChildPtr());
+		visit(treePtr->getItem());
+
+	}
 }
 
 template<class ItemType>
@@ -202,21 +236,20 @@ BinaryNode<ItemType>* BinaryNodeTree<ItemType>::removeValue(BinaryNode<ItemType>
 		return nullptr;
 	}
 
-	// Case 1: The target is less than the current node, move left
 	if (target < subTreePtr->getItem())
 	{
 		subTreePtr->setLeftChildPtr(removeValue(subTreePtr->getLeftChildPtr(), target, success));
 	}
-	// Case 2: The target is greater than the current node, move right
+
 	else if (target > subTreePtr->getItem())
 	{
 		subTreePtr->setRightChildPtr(removeValue(subTreePtr->getRightChildPtr(), target, success));
 	}
-	// Case 3: The target is equal to the current node, delete it
+	
 	else
 	{
 		success = true;
-		subTreePtr = moveValuesUpTree(subTreePtr);  // Move values up and return new subtree root
+		subTreePtr = moveValuesUpTree(subTreePtr);  
 	}
 
 	return subTreePtr;
@@ -237,7 +270,19 @@ int BinaryNodeTree<ItemType>::getNumberOfNodes() const
 template<class ItemType>
 ItemType BinaryNodeTree<ItemType>::getRootData() const throw(PrecondViolatedExcep)
 {
-	return rootPtr->getItem();
+	if (rootPtr == nullptr)
+		throw PrecondViolatedExcep("Tree is empty");
+	else
+		return rootPtr->getItem();
+}
+
+template<class ItemType>
+void BinaryNodeTree<ItemType>::setRootData(const ItemType& newData)
+{
+	if (rootPtr != nullptr)
+		rootPtr->setItem(newData);
+	else
+		rootPtr = new BinaryNode<ItemType>(newData);
 }
 
 template<class ItemType>
@@ -274,9 +319,56 @@ void BinaryNodeTree<ItemType>::clear()
 }
 
 template<class ItemType>
+ItemType BinaryNodeTree<ItemType>::getEntry(const ItemType& anEntry) const throw(NotFoundException)
+{
+	bool success = false;
+	BinaryNode<ItemType>* node = findNode(rootPtr, anEntry, success);
+
+	// If the node was found, return the item
+	if (success && node != nullptr)
+	{
+		return node->getItem();
+	}
+	else
+	{
+		throw NotFoundException("Entry not found in the tree");
+	}
+}
+
+template<class ItemType>
 bool BinaryNodeTree<ItemType>::contains(const ItemType& anEntry) const
 {
 	bool success = false;
 	return findNode(rootPtr, anEntry, success) != nullptr;
+}
+
+template<class ItemType>
+void BinaryNodeTree<ItemType>::preorderTraverse(void visit(ItemType)) const
+{
+	preorder(visit, rootPtr);
+}
+template<class ItemType>
+void BinaryNodeTree<ItemType>::inorderTraverse(void visit(ItemType)) const
+{
+	inorder(visit, rootPtr);
+}
+template<class ItemType>
+void BinaryNodeTree<ItemType>::postorderTraverse(void visit(ItemType)) const
+{
+	postorder(visit, rootPtr);
+}
+
+template<class ItemType>
+BinaryNodeTree<ItemType>& BinaryNodeTree<ItemType>::operator=(const BinaryNodeTree<ItemType>& rightHandSide)
+{
+	if (this != &rightHandSide)  // Avoid self-assignment
+	{
+		// Clear the current tree
+		clear();
+
+		// Copy the tree from the right-hand side using copyTree
+		rootPtr = copyTree(rightHandSide.rootPtr);
+	}
+	return *this;
 }
 //TODO: For the removal in a binary search tree, if the node has two child nodes that is the complicated one. Look at powerpoint for instructions on how to do that. Find another node easier to remove...
