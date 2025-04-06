@@ -30,6 +30,7 @@ struct Person {
 	Date birthday;  
 
 	Person() : name(""), birthday(0, 0, 0) {}
+	Person(string newName) : name(newName), birthday(0, 0, 0) {}
 
 	//Operator overloaders
 	bool operator==(const Person& other) const 
@@ -55,7 +56,7 @@ void displayPerson(Person person)
 
 int main()
 {
-	BinaryNodeTree<Person> tree;
+	BinarySearchTree<Person> tree;
 	char choice;
 	string newName;
 	int newDay, newMonth, newYear;
@@ -97,17 +98,50 @@ int main()
 			break;
 		case 'm':
 		case 'M':
+			cin.ignore();
 			cout << "Enter name of person you want to modify: ";
 			getline(cin, newName);
+			person.name = newName;
 
-			if (tree.contains())
+			if (tree.contains(person))
+			{
+				tree.remove(person);
+				cout << "\nWhat is the modified name of person: ";
+				getline(cin, newName);
+				cout << "\nWhat is the modified birth year of person: ";
+				cin >> newYear;
+				cout << "\nWhat is the modified birth month of person(1-12): ";
+				cin >> newMonth;
+				cout << "\nWhat is the modified birth day of person: ";
+				cin >> newDay;
+				person.name = newName;
+				person.birthday.year = newYear;
+				person.birthday.month = newMonth;
+				person.birthday.day = newDay;
+				tree.add(person);
+			}
+			else
+				cout << "\nPerson not in list.\n";
+			break;
+		case 'r':
+		case 'R':
+			cin.ignore();
+			cout << "Enter name of person you want to remove: ";
+			getline(cin, newName);
+			person.name = newName;
+
+			if (tree.contains(person))
+			{
+				tree.remove(person);
+				cout << person.name << " removed!\n";
+			}
 			break;
 		case 'p':
 		case 'P':
 			tree.inorderTraverse(displayPerson);
 			break;
 		}
-	} while (repeat != 'q' || repeat != 'Q');
+	} while (repeat != 'q' && repeat != 'Q');
 
 
 	

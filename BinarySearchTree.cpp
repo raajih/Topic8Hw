@@ -68,42 +68,47 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::moveValuesUpTree(BinaryNode<It
 		return nullptr;
 	}
 
-	if (subTreePtr->isLeaf())  // Case 1: Leaf node
-	{
-		delete subTreePtr;
-		success = true;  // Node was successfully removed
-		return nullptr;
-	}
-
-	BinaryNode<ItemType>* childPtr = nullptr;
-
-	// Case 2: Node with one child
-	if (subTreePtr->getLeftChildPtr() != nullptr)
-	{
-		childPtr = subTreePtr->getLeftChildPtr();
-	}
-	else if (subTreePtr->getRightChildPtr() != nullptr)
-	{
-		childPtr = subTreePtr->getRightChildPtr();
-	}
-
-	// Move up the child and delete the current node
-	if (childPtr != nullptr)
-	{
-		BinaryNode<ItemType>* temp = subTreePtr;
-		subTreePtr = childPtr;
-		temp->setLeftChildPtr(nullptr);
-		temp->setRightChildPtr(nullptr);
-		delete temp;
-		success = true;  // Node was successfully removed
-	}
 	// Case 3: Node with two children
-	else if (subTreePtr->getLeftChildPtr() != nullptr && subTreePtr->getRightChildPtr() != nullptr)
+	if (subTreePtr->getLeftChildPtr() != nullptr && subTreePtr->getRightChildPtr() != nullptr)
 	{
 		BinaryNode<ItemType>* largestInLeftSubtree = findLargestNode(subTreePtr->getLeftChildPtr());
 		subTreePtr->setItem(largestInLeftSubtree->getItem());
 		subTreePtr->setLeftChildPtr(removeValue(subTreePtr->getLeftChildPtr(), largestInLeftSubtree->getItem()));
 		success = true;  // Node was successfully replaced
+	}
+	// Case 1: Leaf node (no children)
+	else if (subTreePtr->isLeaf())
+	{
+		delete subTreePtr;
+		success = true;  // Node was successfully removed
+		return nullptr;
+	}
+	// Case 2: Node with one child
+	else
+	{
+		BinaryNode<ItemType>* childPtr = nullptr;
+
+		// If the node has a left child, replace it with the left child.
+		if (subTreePtr->getLeftChildPtr() != nullptr)
+		{
+			childPtr = subTreePtr->getLeftChildPtr();
+		}
+		// Otherwise, it has only a right child.
+		else if (subTreePtr->getRightChildPtr() != nullptr)
+		{
+			childPtr = subTreePtr->getRightChildPtr();
+		}
+
+		// Move up the child and delete the current node
+		if (childPtr != nullptr)
+		{
+			BinaryNode<ItemType>* temp = subTreePtr;
+			subTreePtr = childPtr;
+			temp->setLeftChildPtr(nullptr);
+			temp->setRightChildPtr(nullptr);
+			delete temp;
+			success = true;  // Node was successfully removed
+		}
 	}
 
 	return subTreePtr;
