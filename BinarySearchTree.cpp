@@ -68,36 +68,36 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::moveValuesUpTree(BinaryNode<It
 		return nullptr;
 	}
 
-	// Case 3: Node with two children
+	//Case 3: Node with two children
 	if (subTreePtr->getLeftChildPtr() != nullptr && subTreePtr->getRightChildPtr() != nullptr)
 	{
 		BinaryNode<ItemType>* largestInLeftSubtree = findLargestNode(subTreePtr->getLeftChildPtr());
 		subTreePtr->setItem(largestInLeftSubtree->getItem());
 		subTreePtr->setLeftChildPtr(removeValue(subTreePtr->getLeftChildPtr(), largestInLeftSubtree->getItem()));
 	}
-	// Case 1: Leaf node (no children)
+	//Case 1: Leaf node (no children)
 	else if (subTreePtr->isLeaf())
 	{
 		delete subTreePtr;
 		return nullptr;
 	}
-	// Case 2: Node with one child
+	//Case 2: Node with one child
 	else
 	{
 		BinaryNode<ItemType>* childPtr = nullptr;
 
-		// If the node has a left child, replace it with the left child.
+		//If the node has a left child, replace it with the left child.
 		if (subTreePtr->getLeftChildPtr() != nullptr)
 		{
 			childPtr = subTreePtr->getLeftChildPtr();
 		}
-		// Otherwise, it has only a right child.
+		//Otherwise, it has only a right child.
 		else if (subTreePtr->getRightChildPtr() != nullptr)
 		{
 			childPtr = subTreePtr->getRightChildPtr();
 		}
 
-		// Move up the child and delete the current node
+		//Move up the child and delete the current node
 		if (childPtr != nullptr)
 		{
 			BinaryNode<ItemType>* temp = subTreePtr;
@@ -142,6 +142,21 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::findNode(BinaryNode<ItemType>*
 		return findNode(treePtr->getRightChildPtr(), target);
 	
 
+}
+
+// Helper function to recursively check if two trees are the same.
+template<class ItemType>
+bool BinarySearchTree<ItemType>::isSameTreeStructureHelper(BinaryNode<ItemType>* node1, BinaryNode<ItemType>* node2) const
+{
+	if (node1 == nullptr && node2 == nullptr)//Base case where both nodes are null.
+		return true;
+
+	if (node1 == nullptr || node2 == nullptr)//Base case where only one of the nodes is null. Therefore the trees are not the same.
+		return false;
+
+	return (node1->getItem() == node2->getItem()) && //Check if the data of the nodes are the same.
+		isSameTreeStructureHelper(node1->getLeftChildPtr(), node2->getLeftChildPtr()) && //Check left children.
+		isSameTreeStructureHelper(node1->getRightChildPtr(), node2->getRightChildPtr()); //Check right children.
 }
 
 template<class ItemType>
@@ -251,6 +266,85 @@ template<class ItemType>
 void BinarySearchTree<ItemType>::inorderMonthQuery(void visit(ItemType, int), int month) const
 {
 	inorderMonthQueryHelper(visit, rootPtr, month);
+}
+
+template<class ItemType>
+bool BinarySearchTree<ItemType>::isSameTreeStructure(BinarySearchTree<ItemType>& otherTree) const
+{
+	return isSameTreeStructureHelper(this->rootPtr, otherTree.rootPtr);
+}
+
+template<class ItemType>
+bool BinarySearchTree<ItemType>::isSameTreeContents(BinarySearchTree<ItemType>& otherTree) const
+{
+	vector<ItemType> tree1Values;
+	vector<ItemType> tree2Values;
+	bool same = true;
+
+	collectTreeValues(this->rootPtr, tree1Values);//Collect values of this tree.
+	collectTreeValues(otherTree.rootPtr, tree2Values);//Collect values of other tree.
+
+	bubbleSort(tree1Values);//Sort the values of this tree.
+	bubbleSort(tree2Values);//Sort the values of other tree.
+
+	if (tree1Values.size() != tree2Values.size())//If the sizes of the vectors are not equal, the trees are not the same.
+		same = false;
+
+	for (int i = 0; i < tree1Values.size(); i++)//Loop through the vectors and compare the values.
+	{
+		if (tree1Values[i] != tree2Values[i])//If the values are not equal, the trees are not the same.
+		{
+			same = false;
+			break;
+		}
+	}
+
+	return same;
+}
+
+//Recursively go through tree and add items to vector.
+template<class ItemType>
+bool BinarySearchTree<ItemType>::collectTreeValues(BinaryNode<ItemType>* node, vector<ItemType>& values)
+{
+	if (node == nullptr)//Base case.
+		return true;
+
+	collectTreeValues(node->getLeftChildPtr(), values);//Go through left subtree.
+	values.push_back(node->getItem());//Add the current node's value to the vector.
+	collectTreeValues(node->getRightChildPtr(), values);//Go through right subtree.
+
+	return true;
+}
+
+//Use for isSameTreeContents to sort the vector of values.
+template<class ItemType>
+void BinarySearchTree<ItemType>::bubbleSort(vector<ItemType>& vec)
+{
+	int n = vec.size();  //Get the number of elements in the vector.
+	bool swapped;
+
+	//Loop through all elements in the vector.
+	for (int i = 0; i < n - 1; ++i) 
+	{
+		swapped = false;
+
+		//Last i elements are already in place, so we avoid comparing them.
+		for (int j = 0; j < n - 1 - i; ++j) {
+			//Compare adjacent elements and swap if necessary.
+			if (vec[j] > vec[j + 1]) {
+				//Swap the elements.
+				string temp = vec[j];
+				vec[j] = vec[j + 1];
+				vec[j + 1] = temp;
+
+				swapped = true;
+			}
+		}
+
+		//If no two elements were swapped, the vector is already sorted.
+		if (!swapped) 
+			break;
+	}
 }
 
 template<class ItemType>
