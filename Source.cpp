@@ -1,8 +1,12 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 #include "BinaryNode.h"
 #include "BinaryNodeTree.h"
 #include "BinarySearchTree.h"
 using namespace std;
+
 
 
 class Date {
@@ -18,6 +22,7 @@ public:
 	void displayDate() const {
 		cout << month << "/" << day << "/" << year << endl;
 	}
+
 };
 
 // Person struct with a Date member for the birthday
@@ -41,6 +46,7 @@ struct Person {
 	{
 		return (name < rhs.name);
 	}
+
 };
 
 void displayPerson(Person person)
@@ -64,6 +70,7 @@ int main()
 	int newDay, newMonth, newYear;
 	Person person;
 	char repeat = 'a';
+	string filename = "birthdays.txt";
 
 	do
 	{
@@ -74,7 +81,7 @@ int main()
 			<< "(S)earch--display the information about a given person\n"
 			<< "(Q)uery--run a query by entering a month\n"
 			<< "(P)rint--print list of people\n"
-			<< "(F)inish\n";
+			<< "(F)inish and save\n";
 		cout << "Enter choice: ";
 		cin >> choice;
 
@@ -164,7 +171,6 @@ int main()
 		}
 		cin.ignore();
 	} while (repeat != 'F' && repeat != 'f');
-
 
 	
 	return 0;
