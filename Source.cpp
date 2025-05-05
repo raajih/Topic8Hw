@@ -7,171 +7,8 @@
 #include "BinarySearchTree.h"
 using namespace std;
 
-
-
-class Date {
-public:
-	int day;
-	int month;
-	int year;
-
-	// Constructor to initialize a date
-	Date(int d, int m, int y) : day(d), month(m), year(y) {}
-
-	// Function to display the date
-	void displayDate() const {
-		cout << month << "/" << day << "/" << year << endl;
-	}
-
-};
-
-// Person struct with a Date member for the birthday
-struct Person {
-	string name; 
-	Date birthday;  
-
-	Person() : name(""), birthday(0, 0, 0) {}
-	Person(string newName) : name(newName), birthday(0, 0, 0) {}
-
-	//Operator overloaders
-	bool operator==(const Person& other) const 
-	{
-		return (name == other.name);
-	}
-	bool operator>(const Person& rhs) const
-	{
-		return (name > rhs.name);
-	}
-	bool operator<(const Person& rhs) const
-	{
-		return (name < rhs.name);
-	}
-
-};
-
-void displayPerson(Person person)
-{
-	cout << "Name: " << person.name << endl;
-	cout << "Birthday: ";
-	person.birthday.displayDate();
-}
-
-void monthQuery(Person person, int month)
-{
-	if (person.birthday.month == month)
-		displayPerson(person);
-}
-
 int main()
 {
-	//BinarySearchTree<Person> tree;
-	//char choice;
-	//string newName;
-	//int newDay, newMonth, newYear;
-	//Person person;
-	//char repeat = 'a';
-	//string filename = "birthdays.txt";
-
-	//do
-	//{
-	//	//Output menu
-	//	cout << "\n\n(E)nter--add a new person to your list\n"
-	//		<< "(M)odify--change the name or birthday of a person\n"
-	//		<< "(R)emove--remove a person from your list\n"
-	//		<< "(S)earch--display the information about a given person\n"
-	//		<< "(Q)uery--run a query by entering a month\n"
-	//		<< "(P)rint--print list of people\n"
-	//		<< "(F)inish and save\n";
-	//	cout << "Enter choice: ";
-	//	cin >> choice;
-
-	//	switch (choice)
-	//	{
-	//	case 'e':
-	//	case 'E':
-	//		cin.ignore();
-	//		cout << "Enter person's name: ";
-	//		getline(cin, newName);
-	//		cout << "\nEnter person's birth year: ";
-	//		cin >> newYear;
-	//		cout << "\nEnter person's birth month(1-12): ";
-	//		cin >> newMonth;
-	//		cout << "\nEnter person's birth day: ";
-	//		cin >> newDay;
-	//		person.name = newName;
-	//		person.birthday.year = newYear;
-	//		person.birthday.month = newMonth;
-	//		person.birthday.day = newDay;
-
-	//		tree.add(person);
-	//		break;
-	//	case 'm':
-	//	case 'M':
-	//		cin.ignore();
-	//		cout << "Enter name of person you want to modify: ";
-	//		getline(cin, newName);
-	//		person.name = newName;
-
-	//		if (tree.contains(person))
-	//		{
-	//			tree.remove(person);
-	//			cout << "\nWhat is the modified name of person: ";
-	//			getline(cin, newName);
-	//			cout << "\nWhat is the modified birth year of person: ";
-	//			cin >> newYear;
-	//			cout << "\nWhat is the modified birth month of person(1-12): ";
-	//			cin >> newMonth;
-	//			cout << "\nWhat is the modified birth day of person: ";
-	//			cin >> newDay;
-	//			person.name = newName;
-	//			person.birthday.year = newYear;
-	//			person.birthday.month = newMonth;
-	//			person.birthday.day = newDay;
-	//			tree.add(person);
-	//		}
-	//		else
-	//			cout << "\nPerson not in list.\n";
-	//		break;
-	//	case 'r':
-	//	case 'R':
-	//		cin.ignore();
-	//		cout << "Enter name of person you want to remove: ";
-	//		getline(cin, newName);
-	//		person.name = newName;
-
-	//		if (tree.contains(person))
-	//		{
-	//			tree.remove(person);
-	//			cout << person.name << " removed!\n";
-	//		}
-	//		break;
-	//	case 's':
-	//	case 'S':
-	//		cin.ignore();
-	//		cout << "\nEnter the name of the person you want to search for: ";
-	//		getline(cin, newName);
-	//		person.name = newName;
-
-	//		if (tree.contains(person))
-	//		{
-	//			person = tree.getEntry(person);
-	//			displayPerson(person);
-	//		}
-	//		else
-	//			cout << "\nPerson not in list.\n";
-	//		break;
-	//	case 'q':
-	//	case 'Q':
-	//		cin.ignore();
-	//		cout << "\nEnter the month you would like to view: ";
-	//		cin >> newMonth;
-	//		tree.inorderMonthQuery(monthQuery, newMonth);
-
-	//		break;
-	//	}
-	//	cin.ignore();
-	//} while (repeat != 'F' && repeat != 'f');
-
 	BinarySearchTree<string> tree1;
 	BinarySearchTree<string> tree2;
 
@@ -186,7 +23,17 @@ int main()
 	cout << (tree1.isSameTreeStructure(tree2) ? "The trees structure and contents are the same." : "The trees structure and contents are not the same.") << endl;
 	cout << (tree1.isSameTreeContents(tree2) ? "The trees contents are the same." : "The trees contents are not the same.") << endl;
 
+	tree1.clear();
+	tree2.clear();
 
+	tree1.add("abc");
+	tree1.add("ghi");
+	tree2.add("abc");
+	tree2.add("def");
+	tree2.add("ghi");
+
+	cout << endl << (tree1.isSameTreeStructure(tree2) ? "The trees structure and contents are the same." : "The trees structure and contents are not the same.") << endl;
+	cout << (tree1.isSameTreeContents(tree2) ? "The trees contents are the same." : "The trees contents are not the same.") << endl;
 
 	return 0;
 }
