@@ -183,8 +183,10 @@ int main()
 	tree2.add("abc");
 	tree2.add("ghi");
 
-	cout << (tree1.isSameTreeStructure(tree2) ? "The trees are the same." : "The trees are not the same.") << endl;
+	cout << (tree1.isSameTreeStructure(tree2) ? "The trees structure and contents are the same." : "The trees structure and contents are not the same.") << endl;
+	cout << (tree1.isSameTreeContents(tree2) ? "The trees contents are the same." : "The trees contents are not the same.") << endl;
 
-	
+
+
 	return 0;
 }

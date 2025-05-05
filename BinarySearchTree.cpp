@@ -304,7 +304,7 @@ bool BinarySearchTree<ItemType>::isSameTreeContents(BinarySearchTree<ItemType>& 
 
 //Recursively go through tree and add items to vector.
 template<class ItemType>
-bool BinarySearchTree<ItemType>::collectTreeValues(BinaryNode<ItemType>* node, vector<ItemType>& values)
+bool BinarySearchTree<ItemType>::collectTreeValues(BinaryNode<ItemType>* node, vector<ItemType>& values) const
 {
 	if (node == nullptr)//Base case.
 		return true;
@@ -318,7 +318,7 @@ bool BinarySearchTree<ItemType>::collectTreeValues(BinaryNode<ItemType>* node, v
 
 //Use for isSameTreeContents to sort the vector of values.
 template<class ItemType>
-void BinarySearchTree<ItemType>::bubbleSort(vector<ItemType>& vec)
+void BinarySearchTree<ItemType>::bubbleSort(vector<ItemType>& vec) const
 {
 	int n = vec.size();  //Get the number of elements in the vector.
 	bool swapped;

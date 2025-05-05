@@ -33,8 +33,8 @@ class BinarySearchTree : public BinaryNodeTree<ItemType>
 	BinaryNode<ItemType>* findNode(BinaryNode<ItemType>* treePtr, const ItemType& target) const;
 	bool isSameTreeStructureHelper(BinaryNode<ItemType>* node1, BinaryNode<ItemType>* node2) const;
 	void inorderMonthQueryHelper(void visit(ItemType, int), BinaryNode<ItemType>* treePtr, int queryMonth) const;
-	bool collectTreeValues(BinaryNode<ItemType>* node, vector<ItemType>& values);//Puts values of tree into a vector.
-	void bubbleSort(vector<ItemType>& vec);//Sorts the vector of values in ascending order.
+	bool collectTreeValues(BinaryNode<ItemType>* node, vector<ItemType>& values) const;//Puts values of tree into a vector.
+	void bubbleSort(vector<ItemType>& vec) const;//Sorts the vector of values in ascending order.
 
 	public:
 	//------------------------------------------------------------
