@@ -7,6 +7,7 @@
 #include "BinaryNodeTree.h"
 #include "NotFoundException.h"
 #include "PrecondViolatedExcep.h"
+#include <vector>
 template<class ItemType>
 class BinarySearchTree : public BinaryNodeTree<ItemType>
 {
@@ -30,8 +31,10 @@ class BinarySearchTree : public BinaryNodeTree<ItemType>
 	// Returns a pointer to the node containing the given value,
 	// or nullptr if not found.
 	BinaryNode<ItemType>* findNode(BinaryNode<ItemType>* treePtr, const ItemType& target) const;
-	bool isSameTreeHelper(BinaryNode<ItemType>* tree1, BinaryNode<ItemType>* tree2) const;
+	bool isSameTreeStructureHelper(BinaryNode<ItemType>* node1, BinaryNode<ItemType>* node2) const;
 	void inorderMonthQueryHelper(void visit(ItemType, int), BinaryNode<ItemType>* treePtr, int queryMonth) const;
+	bool collectTreeValues(BinaryNode<ItemType>* node, vector<ItemType>& values) const;//Puts values of tree into a vector.
+	void bubbleSort(vector<ItemType>& vec) const;//Sorts the vector of values in ascending order.
 
 	public:
 	//------------------------------------------------------------
@@ -55,6 +58,8 @@ class BinarySearchTree : public BinaryNodeTree<ItemType>
 	ItemType getEntry(const ItemType& anEntry) const throw(NotFoundException);
 	bool contains(const ItemType& anEntry) const;
 	void inorderMonthQuery(void visit(ItemType, int), int month) const;
+	bool isSameTreeStructure(BinarySearchTree<ItemType>& otherTree) const;//Checks if two trees have same contents AND structure.
+	bool isSameTreeContents(BinarySearchTree<ItemType>& otherTree) const;//Checks if two trees have same contents but not necessarily the same structure.
 	//------------------------------------------------------------
 	// Public Traversals Section.
 	//------------------------------------------------------------
